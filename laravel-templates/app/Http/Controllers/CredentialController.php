@@ -9,14 +9,11 @@ use Illuminate\Support\Facades\Auth;
 class CredentialController extends Controller
 {
     /**
-     * Display a listing of the user's saved credentials.
+     * Display a listing of the user's credentials.
      */
     public function index()
     {
-        $credentials = SavedCredential::where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->get();
-
+        $credentials = Auth::user()->savedCredentials()->latest()->get();
         return view('credentials.index', compact('credentials'));
     }
 
@@ -30,29 +27,24 @@ class CredentialController extends Controller
 
     /**
      * Store a newly created credential in storage.
-     * All data is automatically AES encrypted by the model.
+     * All fields are automatically AES encrypted by the model.
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'site_name' => ['required', 'string', 'max:255'],
-            'site_url' => ['nullable', 'string', 'max:500'],
-            'username' => ['required', 'string', 'max:255'],
-            'password' => ['required', 'string', 'max:500'],
-            'notes' => ['nullable', 'string', 'max:1000'],
+        $validated = $request->validate([
+            'site_name' => 'required|string|max:255',
+            'site_url' => 'nullable|string|max:500',
+            'username' => 'required|string|max:255',
+            'password' => 'required|string|max:500',
+            'notes' => 'nullable|string|max:2000',
         ]);
 
-        SavedCredential::create([
-            'user_id' => Auth::id(),
-            'site_name' => $request->site_name,
-            'site_url' => $request->site_url,
-            'username' => $request->username,
-            'password' => $request->password,
-            'notes' => $request->notes,
-        ]);
+        $validated['user_id'] = Auth::id();
+
+        SavedCredential::create($validated);
 
         return redirect()->route('credentials.index')
-            ->with('success', 'Credential saved successfully!');
+            ->with('success', 'Credential saved successfully with AES encryption.');
     }
 
     /**
@@ -60,7 +52,7 @@ class CredentialController extends Controller
      */
     public function show(SavedCredential $credential)
     {
-        // Ensure user can only view their own credentials
+        // Ensure user owns this credential
         if ($credential->user_id !== Auth::id()) {
             abort(403);
         }
@@ -73,7 +65,7 @@ class CredentialController extends Controller
      */
     public function edit(SavedCredential $credential)
     {
-        // Ensure user can only edit their own credentials
+        // Ensure user owns this credential
         if ($credential->user_id !== Auth::id()) {
             abort(403);
         }
@@ -86,29 +78,23 @@ class CredentialController extends Controller
      */
     public function update(Request $request, SavedCredential $credential)
     {
-        // Ensure user can only update their own credentials
+        // Ensure user owns this credential
         if ($credential->user_id !== Auth::id()) {
             abort(403);
         }
 
-        $request->validate([
-            'site_name' => ['required', 'string', 'max:255'],
-            'site_url' => ['nullable', 'string', 'max:500'],
-            'username' => ['required', 'string', 'max:255'],
-            'password' => ['required', 'string', 'max:500'],
-            'notes' => ['nullable', 'string', 'max:1000'],
+        $validated = $request->validate([
+            'site_name' => 'required|string|max:255',
+            'site_url' => 'nullable|string|max:500',
+            'username' => 'required|string|max:255',
+            'password' => 'required|string|max:500',
+            'notes' => 'nullable|string|max:2000',
         ]);
 
-        $credential->update([
-            'site_name' => $request->site_name,
-            'site_url' => $request->site_url,
-            'username' => $request->username,
-            'password' => $request->password,
-            'notes' => $request->notes,
-        ]);
+        $credential->update($validated);
 
         return redirect()->route('credentials.index')
-            ->with('success', 'Credential updated successfully!');
+            ->with('success', 'Credential updated successfully.');
     }
 
     /**
@@ -116,7 +102,7 @@ class CredentialController extends Controller
      */
     public function destroy(SavedCredential $credential)
     {
-        // Ensure user can only delete their own credentials
+        // Ensure user owns this credential
         if ($credential->user_id !== Auth::id()) {
             abort(403);
         }
@@ -124,15 +110,16 @@ class CredentialController extends Controller
         $credential->delete();
 
         return redirect()->route('credentials.index')
-            ->with('success', 'Credential deleted successfully!');
+            ->with('success', 'Credential deleted successfully.');
     }
 
     /**
-     * API endpoint to get decrypted password (for copy functionality)
+     * Get the decrypted password for a credential.
+     * Used for AJAX copy-to-clipboard functionality.
      */
     public function getPassword(SavedCredential $credential)
     {
-        // Ensure user can only access their own credentials
+        // Ensure user owns this credential
         if ($credential->user_id !== Auth::id()) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
