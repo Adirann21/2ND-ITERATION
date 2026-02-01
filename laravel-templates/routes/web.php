@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CredentialController;
+use App\Http\Controllers\FacilityController;
+use App\Http\Controllers\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,9 +54,15 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     // Reserve page (Dashboard) - requires login
-    Route::get('/reserve', function () {
-        return view('reserve');
-    })->name('reserve');
+    Route::get('/reserve', [ReservationController::class, 'index'])->name('reserve');
+
+    // Facilities
+    Route::get('/facilities', [FacilityController::class, 'index'])->name('facilities.index');
+    Route::get('/facilities/{facility}', [FacilityController::class, 'show'])->name('facilities.show');
+    Route::get('/facilities/{facility}/availability', [FacilityController::class, 'availability'])->name('facilities.availability');
+
+    // Reservations
+    Route::resource('reservations', ReservationController::class);
 
     // Saved Credentials (Password Manager)
     Route::resource('credentials', CredentialController::class);

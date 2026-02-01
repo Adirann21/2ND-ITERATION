@@ -51,6 +51,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the user's reservations.
+     */
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    /**
      * AES Encrypt the user's name when storing
      */
     public function setNameAttribute($value)

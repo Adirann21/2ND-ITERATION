@@ -16,8 +16,8 @@
 
     <div class="flex items-center gap-3">
         @auth
-            <a href="/reserve" class="text-sm font-medium text-gray-700 hover:text-gray-900">Dashboard</a>
-            <a href="{{ route('credentials.index') }}" class="text-sm font-medium text-gray-700 hover:text-gray-900">Passwords</a>
+            <a href="{{ route('reserve') }}" class="text-sm font-medium text-gray-700 hover:text-gray-900">My Reservations</a>
+            <a href="{{ route('facilities.index') }}" class="text-sm font-medium text-gray-700 hover:text-gray-900">Facilities</a>
             <form method="POST" action="{{ route('logout') }}" class="inline">
                 @csrf
                 <button type="submit" class="px-4 py-1.5 text-sm font-medium bg-black text-white rounded-full hover:bg-gray-800 transition-colors">
