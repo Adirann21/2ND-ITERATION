@@ -71,4 +71,9 @@ Route::middleware('auth')->group(function () {
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Encryption Demo Routes (for capstone demonstration)
+    Route::get('/demo/encryption', function () {
+        return view('demo.encryption');
+    })->name('demo.encryption');
 });
