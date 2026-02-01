@@ -12,7 +12,7 @@
         </div>
 
         <!-- Quick Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
                 <div class="flex items-center">
                     <div class="p-3 bg-blue-100 rounded-lg">
@@ -54,6 +54,20 @@
                     </div>
                 </div>
             </div>
+
+            <a href="{{ route('credentials.index') }}" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+                <div class="flex items-center">
+                    <div class="p-3 bg-amber-100 rounded-lg">
+                        <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Saved Passwords</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ Auth::user()->savedCredentials->count() }}</p>
+                    </div>
+                </div>
+            </a>
         </div>
 
         <!-- Available Facilities -->

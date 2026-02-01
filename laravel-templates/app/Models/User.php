@@ -43,6 +43,14 @@ class User extends Authenticatable
     ];
 
     /**
+     * Get the user's saved credentials.
+     */
+    public function savedCredentials()
+    {
+        return $this->hasMany(SavedCredential::class);
+    }
+
+    /**
      * AES Encrypt the user's name when storing
      */
     public function setNameAttribute($value)

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CredentialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +55,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/reserve', function () {
         return view('reserve');
     })->name('reserve');
+
+    // Saved Credentials (Password Manager)
+    Route::resource('credentials', CredentialController::class);
+    Route::get('/credentials/{credential}/password', [CredentialController::class, 'getPassword'])
+        ->name('credentials.password');
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
