@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Facility;
+use Illuminate\Support\Facades\DB;
 
 class FacilitySeeder extends Seeder
 {
@@ -12,8 +13,10 @@ class FacilitySeeder extends Seeder
      */
     public function run(): void
     {
-        // Clear old facilities first
+        // Clear old facilities first - disable foreign key checks for truncate
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Facility::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $facilities = [
             // Computer Labs
