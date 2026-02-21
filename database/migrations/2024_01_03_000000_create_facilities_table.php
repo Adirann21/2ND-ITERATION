@@ -11,9 +11,9 @@ return new class extends Migration
     {
         Schema::create('facilities', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('building');
-            $table->string('type');
+            $table->string('name', 100);
+            $table->string('building', 100);
+            $table->string('type', 50);
             $table->integer('capacity');
             $table->text('amenities')->nullable();
             $table->boolean('requires_approval')->default(false);

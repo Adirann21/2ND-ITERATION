@@ -121,6 +121,24 @@ class FacilitySeeder extends Seeder
                 'requires_approval' => false,
             ],
 
+            // Conference Rooms
+            [
+                'name' => 'Conference Room A',
+                'building' => 'Administrative Building',
+                'type' => 'Meeting Room',
+                'capacity' => 30,
+                'amenities' => 'Conference table, Video conferencing, Projector, Whiteboard',
+                'requires_approval' => false,
+            ],
+            [
+                'name' => 'Conference Room B',
+                'building' => 'Administrative Building',
+                'type' => 'Meeting Room',
+                'capacity' => 30,
+                'amenities' => 'Conference table, Video conferencing, Projector, Whiteboard',
+                'requires_approval' => false,
+            ],
+
             // Gym
             [
                 'name' => 'GYM',
