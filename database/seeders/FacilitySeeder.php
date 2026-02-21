@@ -12,6 +12,9 @@ class FacilitySeeder extends Seeder
      */
     public function run(): void
     {
+        // Clear old facilities first
+        Facility::truncate();
+
         $facilities = [
             // Computer Labs
             [
